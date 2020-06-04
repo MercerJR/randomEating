@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<!--<html lang="en">-->
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>吃吃吃</title>
+    <meta charset="utf-8" name="viewport" content="width=device-width">
+    <link rel="stylesheet" th:href="@{/webjars/mdui/dist/css/mdui.css}">
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/mdui/dist/js/mdui.js}"></script>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.css" rel="stylesheet">
+    <style>
+        body{
+            background: rgba(189, 190, 63, 0.36) url("img/timg (1).jpg");
+            font-weight: 400;
+            font-size: 1em;
+            line-height: 1;
+            font-family: 'Raleway', Calibri, Arial, sans-serif;
+        }
+        </style>
+
+</head>
+
+<!--<body>-->
+<body class="mdui-theme-primary-indigo mdui-theme-accent-pink">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">吃吃吃</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="#">首页<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="#" onclick="jumpToSecond()">列表</a>
+            <a class="nav-item nav-link" href="#" onclick="jumpToforth()">再来点好吃的</a>
+            <a class="nav-item nav-link disabled" href="#">Disabled</a>
+        </div>
+    </div>
+</nav>
+
+<p>
+    <div class="container">
+
+<p>
+<div class="container-fluid">
+    <form method="get">
+        <table class="table">
+            <h3>抽签方法1：</h3>
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">区域</th>
+                <th scope="col">食堂/校外种类</th>
+                <th scope="col">名称</th>
+
+            </tr>
+            </thead>
+
+            <tbody id="choose1">
+            </tbody>
+<!--            <tbody id="choose2">-->
+<!--            </tbody>-->
+        </table>
+        <button type="button" onclick="chooseArea()" class="btn btn-outline-success">抽区域</button>
+        <button type="button" onclick="chooseCanteenAfterArea()" class="btn btn-outline-warning">抽食堂</button>
+        <button type="button" onclick="chooseFoodsAfterCanteen()" class="btn btn-outline-info">抽吃的</button>
+
+    </form>
+</div>
+
+</p>
+
+<p>
+<table class="table table-borderless">
+    <thead>
+    <tr>
+        <h5>前五次抽签记录</h5>
+        <th scope="col"></th>
+        <th scope="col">区域</th>
+        <th scope="col">食堂/校外种类</th>
+        <th scope="col">名称</th>
+    </tr>
+    </thead>
+    <tbody id="AreaHistory">
+    </tbody>
+</table>
+</p>
+
+<p>
+<div class="container">
+    <form method="get">
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <h3>抽签方法2：</h3>
+                <th scope="col">类型</th>
+                <th scope="col">名称</th>
+
+            </tr>
+            </thead>
+            <tbody id="choose2">
+
+            </tbody>
+        </table>
+        <button type="button" onclick="chooseType()" class="btn btn-outline-dark">抽类型</button>
+        <button type="button" onclick="chooseFoodsAfterType()" class="btn btn-outline-danger">抽吃的</button>
+    </form>
+</div>
+</p>
+
+<p>
+<table class="table table-borderless">
+    <thead>
+    <tr>
+        <h5>前五次抽签记录</h5>
+        <th scope="col"></th>
+        <th scope="col">类型</th>
+        <th scope="col">名称</th>
+    </tr>
+    </thead>
+    <tbody id="typeHistory">
+    </tbody>
+</table>
+</p>
+
+</div>
+</p>
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
+
+</html>
+<script>
+
+    function chooseArea() {
+        var req = new XMLHttpRequest();
+        //设置请求方法 主机地址，是否异步
+        req.open("get", "/random_eating/random/randomArea", true);
+        req.send();
+        //发送请求
+        //req.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        //3.监听状态
+        req.onreadystatechange = function () {
+            //console.log(req.readyState + " " + req.status);
+            if (req.readyState == 4 && req.status == 200) {
+                //响应成功
+                //console.log(req.responseText); //服务器响应回来的string数据
+                //将接收json字符创转成Json对象(只能转数组[])
+                var str = "";
+                var content = JSON.parse(req.responseText);
+                var area = content.data.area;
+                var canteen = content.data.canteen;
+                var foods = content.data.foods;
+                str += "<tr>";
+                str += "<td>";
+                str += area;
+                str += "</td>";
+                str += "<td>";
+                if (canteen == null){
+                    str += "";
+                }else {
+                    str += canteen;
+                }
+                str += "</td>";
+                str += "<td>";
+                if (foods == null){
+                    str += "";
+                }else {
+                    str += foods;
+                }
+                str += "</td>";
+                str += "</tr>";
+                document.getElementById("choose1").innerHTML = str;
+
+            }
+        }
+    }
+
+    function chooseCanteenAfterArea() {
+        var req = new XMLHttpRequest();
+        //设置请求方法 主机地址，是否异步
+        req.open("get", "/random_eating/random/randomCanteenAfterArea", true);
+        req.send();
+        //发送请求
+        //req.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        //3.监听状态
+        req.onreadystatechange = function () {
+            //console.log(req.readyState + " " + req.status);
+            if (req.readyState == 4 && req.status == 200) {
+                //响应成功
+                //console.log(req.responseText); //服务器响应回来的string数据
+                //将接收json字符创转成Json对象(只能转数组[])
+                var str = "";
+                var content = JSON.parse(req.responseText);
+                var area = content.data.area;
+                var canteen = content.data.canteen;
+                var foods = content.data.foods;
+                str += "<tr>";
+                str += "<td>";
+                if (area == null){
+                    str += "";
+                }else {
+                    str += area;
+                }
+                str += "</td>";
+                str += "<td>";
+                str += canteen;
+                str += "</td>";
+                str += "<td>";
+                if (foods == null){
+                    str += "";
+                }else {
+                    str += foods;
+                }
+                str += "</td>";
+                str += "</tr>";
+                document.getElementById("choose1").innerHTML = str;
+
+            }
+        }
+    }
+
+    function chooseFoodsAfterCanteen() {
+        var req = new XMLHttpRequest();
+        //设置请求方法 主机地址，是否异步
+        req.open("get", "/random_eating/random/randomFoodsAfterCanteen", true);
+        req.send();
+        //发送请求
+        //req.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        //3.监听状态
+        req.onreadystatechange = function () {
+            //console.log(req.readyState + " " + req.status);
+            if (req.readyState == 4 && req.status == 200) {
+                //响应成功
+                //console.log(req.responseText); //服务器响应回来的string数据
+                //将接收json字符创转成Json对象(只能转数组[])
+                var str = "";
+                var content = JSON.parse(req.responseText);
+                var area = content.data.area;
+                var canteen = content.data.canteen;
+                var foods = content.data.foods;
+                str += "<tr>";
+                str += "<td>";
+                if (area == null){
+                    str += "";
+                }else {
+                    str += area;
+                }
+                str += "</td>";
+                str += "<td>";
+                str += canteen;
+                str += "</td>";
+                str += "<td>";
+                str += foods;
+                str += "</td>";
+                str += "</tr>";
+                document.getElementById("choose1").innerHTML = str;
+
+            }
+        }
+    }
+
+
+    function chooseType() {
+        var req = new XMLHttpRequest();
+        //设置请求方法 主机地址，是否异步
+        req.open("get", "/random_eating/random/randomType", true);
+        req.send();
+        //发送请求
+        //req.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        //3.监听状态
+        req.onreadystatechange = function () {
+            //console.log(req.readyState + " " + req.status);
+            if (req.readyState == 4 && req.status == 200) {
+                //响应成功
+                //console.log(req.responseText); //服务器响应回来的string数据
+                //将接收json字符创转成Json对象(只能转数组[])
+                var str = "";
+                var content = JSON.parse(req.responseText);
+                var type = content.data.type;
+                var foods = content.data.foods;
+                str += "<tr>";
+                str += "<td>";
+                str += type;
+                str += "</td>";
+                str += "<td>";
+                if (foods == null){
+                    str += "";
+                }else {
+                    str += foods;
+                }
+                str += "</td>";
+                str += "</tr>";
+                document.getElementById("choose2").innerHTML = str;
+
+            }
+        }
+    }
+
+    function chooseFoodsAfterType() {
+        var req = new XMLHttpRequest();
+        //设置请求方法 主机地址，是否异步
+        req.open("get", "/random_eating/random/randomFoodsAfterType", true);
+        req.send();
+        //发送请求
+        //req.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        //3.监听状态
+        req.onreadystatechange = function () {
+            //console.log(req.readyState + " " + req.status);
+            if (req.readyState == 4 && req.status == 200) {
+                //响应成功
+                //console.log(req.responseText); //服务器响应回来的string数据
+                //将接收json字符创转成Json对象(只能转数组[])
+                var content = JSON.parse(req.responseText);
+                var str = "";
+                var type = content.data.type;
+                var foods = content.data.foods;
+                str += "<tr>";
+                str += "<td>";
+                str += type;
+                str += "</td>";
+                str += "<td>";
+                if (foods == null){
+                    str += "";
+                }else {
+                    str += foods;
+                }
+                str += "</td>";
+                str += "</tr>";
+                document.getElementById("choose2").innerHTML = str;
+            }
+        }
+    }
+
+    function showAreaHistory() {
+        var req = new XMLHttpRequest();
+        //设置请求方法 主机地址，是否异步
+        req.open("get", "/random_eating/show/areaHistory", true);
+        req.send();
+        req.onreadystatechange = function () {
+            if (req.readyState == 4 && req.status == 200) {
+                var str = "";
+                var n = 1;
+                var content = JSON.parse(req.responseText);
+                var data = content.data
+                for (var i = 4;i >= 0;i--){
+                    str += "<tr>";
+                    str += "<td>";
+                    str += n;
+                    str += "</td>";
+                    str += "<td>";
+                    if (data[i].area == null){
+                        str += "";
+                    }else {
+                        str += data[i].area;
+                    }
+                    str += "</td>";
+                    str += "<td>";
+                    if (data[i].canteen == null){
+                        str += "";
+                    }else {
+                        str += data[i].canteen;
+                    }
+                    str += "</td>";
+                    str += "<td>";
+                    if (data[i].foods == null){
+                        str += "";
+                    }else {
+                        str += data[i].foods;
+                    }
+                    str += "</td>";
+                    str += "</tr>";
+                    n++;
+                }
+                document.getElementById("AreaHistory").innerHTML = str;
+
+            }
+        }
+    }
+
+    function showTypeHistory() {
+        var req = new XMLHttpRequest();
+        //设置请求方法 主机地址，是否异步
+        req.open("get", "/random_eating/show/typeHistory", true);
+        req.send();
+        req.onreadystatechange = function () {
+            if (req.readyState == 4 && req.status == 200) {
+                var str = "";
+                var n = 1;
+                var content = JSON.parse(req.responseText);
+                var data = content.data
+                for (var i = 4;i >= 0;i--){
+                    str += "<tr>";
+                    str += "<td>";
+                    str += n;
+                    str += "</td>";
+                    str += "<td>";
+                    if (data[i].type == null){
+                        str += "";
+                    }else {
+                        str += data[i].type;
+                    }
+                    str += "</td>";
+                    str += "<td>";
+                    if (data[i].foods == null){
+                        str += "";
+                    }else {
+                        str += data[i].foods;
+                    }
+                    str += "</td>";
+                    str += "</tr>";
+                    n++;
+                }
+                document.getElementById("typeHistory").innerHTML = str;
+
+            }
+        }
+    }
+
+    showAreaHistory();
+    showTypeHistory();
+
+
+    function jumpToSecond() {
+        window.location.href ='/random_eating/showAll';
+    }
+    function jumpToforth() {
+        window.location.href ='/random_eating/newOne';
+    }
+</script>
+

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!--<html lang="en">-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>吃吃吃 列表</title>
+    <meta charset="utf-8" name="viewport" content="width=device-width">
+    <link rel="stylesheet" th:href="@{/webjars/mdui/dist/css/mdui.css}">
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/mdui/dist/js/mdui.js}"></script>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.css" rel="stylesheet">
+    <style>
+        body{
+            background: rgba(58, 175, 23, 0.39) url("img/timg (1).jpg");
+            font-weight: 400;
+            font-size: 1em;
+            line-height: 1;
+            font-family: 'Raleway', Calibri, Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">吃吃吃</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="#" onclick="jumpToFirst()">首页<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="#" onclick="jumpToSecond()">列表</a>
+            <a class="nav-item nav-link active" href="#">再来点好吃的</a>
+            <a class="nav-item nav-link disabled" href="#">Disabled</a>
+        </div>
+    </div>
+</nav>
+<p>
+    <div class="container">
+<p>
+<div class="container">
+    <form method="get">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <h4>又发现好吃的了</h4>
+                <th scope="col">区域</th>
+                <th scope="col">食堂/校外种类</th>
+                <th scope="col">类型</th>
+                <th scope="col">名称</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <input id="area" type="text" class="form-control">
+                        <div class="input-group-append">
+
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group">
+                        <input id="canteen" type="text" class="form-control">
+                        <div class="input-group-append">
+
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group">
+                        <input id="type" type="text" class="form-control">
+                        <div class="input-group-append">
+
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group">
+                        <input id="foods" type="text" class="form-control">
+                        <div class="input-group-append">
+
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" onclick="insertNew()" class="btn btn-outline-primary">保存</button>
+
+    </form>
+</div>
+</p>
+
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
+
+</html>
+
+<script>
+    function jumpToFirst() {
+        window.location.href ='/random_eating/';
+    }
+    function jumpToSecond() {
+        window.location.href ='/random_eating/showAll';
+    }
+
+    function insertNew() {
+        var area = $("#area").val();
+        var canteen = $("#canteen").val();
+        var type = $("#type").val();
+        var foods = $("#foods").val();
+        $.ajax({
+            url: "/random_eating/insertNew",
+            data: {
+                "area": area,
+                "canteen": canteen,
+                "type": type,
+                "foods": foods
+            },
+            type: "POST",
+            dataType: "json",//返回值类型 JSON
+            success: function (res) {  //请求成功的回调
+                if (res.isok) {
+                    // window.location.href = '/index?username='+$('#username').val(); //请求成功之后跳转的页面
+                    //getWebSocket( $("#username").val());
+                } else {
+                    alert(res.message)
+                }
+            },
+            error: function (res) { //请求失败的回调
+                alert(res.message)
+            },
+
+
+        })
+    }
+</script>

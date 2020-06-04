@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.random_eating.dao.GeneralMapper">
+
+
+    <select id="getAreaList" resultType="com.project.random_eating.model.Area">
+        SELECT *
+        FROM area
+    </select>
+
+    <select id="getCanteenList" resultType="com.project.random_eating.model.Canteen">
+        SELECT *
+        FROM canteen
+    </select>
+
+    <select id="getFoodsList" resultType="com.project.random_eating.model.Foods">
+        SELECT *
+        FROM foods
+    </select>
+
+    <select id="getTypeList" resultType="com.project.random_eating.model.Type">
+        SELECT *
+        FROM type
+    </select>
+
+    <select id="getAreaNum" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM area
+    </select>
+
+    <select id="getCanteenNum" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM canteen
+    </select>
+
+    <select id="getFoodsNum" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM foods
+    </select>
+
+    <select id="getTypeNum" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM type
+    </select>
+
+    <insert id="insertFoods">
+        INSERT INTO foods
+        SET name = #{name},code = #{code},parent = #{parent}
+    </insert>
+
+    <select id="getCanteenIdByName" resultType="java.lang.Integer">
+        SELECT id
+        FROM canteen WHERE name = #{name}
+    </select>
+
+    <select id="getTypeIdByName" resultType="java.lang.Integer">
+        SELECT id
+        FROM type WHERE name = #{name}
+    </select>
+
+    <select id="getCanteenParent" resultType="java.lang.Integer">
+        SELECT parent
+        FROM canteen WHERE name = #{name}
+    </select>
+
+    <select id="getAreaNameById" resultType="java.lang.String">
+        SELECT name
+        FROM area WHERE id = #{id}
+    </select>
+
+    <select id="getAreaResultNum" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM result_area
+    </select>
+
+    <select id="getTypeResultNum" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM result_type
+    </select>
+
+    <select id="getAreaResultList" resultType="com.project.random_eating.model.AreaResult">
+        SELECT *
+        FROM result_area
+    </select>
+
+    <select id="getTypeResultList" resultType="com.project.random_eating.model.TypeResult">
+        SELECT *
+        FROM result_type
+    </select>
+
+
+</mapper>
